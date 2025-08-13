@@ -7,9 +7,6 @@ function exibirTextoNaTela(tag, texto) {
     let elemento = document.querySelector(tag);
     elemento.innerHTML = texto;
 }
-let numeroSecreto = gerarNumeroAleatorio();
-let tentativas = 1;
-}
 
 exibirMensagemInicial();
 
