@@ -1,64 +1,42 @@
-let listaDeNumerosSorteados = [];
-let numeroLimite =40;
-let numeroSecreto = gerarNumeroAleatorio();
-let tentativas = 1;
+import { createGame, limit } from './game.mjs';
 
-function exibirTextoNaTela(tag, texto) {
-    let elemento = document.querySelector(tag);
-    elemento.innerHTML = texto;
+const game = createGame();
+const input = document.getElementById('guess');
+const submit = document.getElementById('submit');
+const restart = document.getElementById('reiniciar');
+const heading = document.querySelector('h1');
+const status = document.getElementById('status');
+
+function showInitialState() {
+    heading.textContent = 'Jogo do número secreto';
+    status.textContent = `Escolha um número de 1 a ${limit}.`;
+    input.value = '';
+    input.disabled = submit.disabled = false;
+    restart.disabled = true;
 }
 
-exibirMensagemInicial();
-
-function verificarChute() {
-    let chute = document.querySelector('input').value;
-    
-    if (chute == numeroSecreto) {
-        exibirTextoNaTela('h1', 'Acertou!');
-        let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
-        let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
-        exibirTextoNaTela('p', mensagemTentativas);
-        document.getElementById('reiniciar').removeAttribute('disabled');
-    } else {
-        if (chute > numeroSecreto) {
-            exibirTextoNaTela('p', 'O número secreto é menor');
-        } else {
-            exibirTextoNaTela('p', 'O número secreto é maior');
-        }
-        tentativas++;
-        limparCampo();
+document.getElementById('guess-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const { result, attempts } = game.guess(input.value);
+    if (result === 'correct') {
+        heading.textContent = 'Acertou!';
+        status.textContent = `Você descobriu o número secreto em ${attempts} ${attempts === 1 ? 'tentativa' : 'tentativas'}!`;
+        input.disabled = submit.disabled = true;
+        restart.disabled = false;
+        restart.focus();
+    } else if (result !== 'finished') {
+        status.textContent = { invalid: `Digite um número inteiro de 1 a ${limit}.`, lower: 'O número secreto é menor.', higher: 'O número secreto é maior.' }[result];
+        input.select();
     }
-}
+});
 
-function gerarNumeroAleatorio() {
-    let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
-    let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
+restart.addEventListener('click', () => {
+    game.restart();
+    showInitialState();
+    input.focus();
+});
 
-    if (quantidadeDeElementosNaLista == numeroLimite) {
-        listaDeNumerosSorteados = [];
-    }
-    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
-        return gerarNumeroAleatorio();
-    } else {
-        listaDeNumerosSorteados.push(numeroEscolhido);
-        console.log(listaDeNumerosSorteados)
-        return numeroEscolhido;
-    }
-}
-
-function limparCampo() {
-    chute = document.querySelector('input');
-    chute.value = '';
-}
-
-function reiniciarJogo() {
-    numeroSecreto = gerarNumeroAleatorio();
-    limparCampo();
-    tentativas = 1;
-    exibirMensagemInicial();
-    document.getElementById('reiniciar').setAttribute('disabled', true)
-}
-
+showInitialState();
 
 
 
