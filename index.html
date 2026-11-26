@@ -9,12 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>JS Game</title>
+    <title>Jogo do número secreto</title>
 </head>
 
 <body>
 
-    <div class="container">
+    <main class="container">
         <div class="container__conteudo">
             <form class="container__informacoes" id="guess-form" novalidate>
                 <div class="container__texto">     
@@ -22,15 +22,28 @@
                     <h1>Jogo do número secreto</h1>
                     <p class="texto__paragrafo" id="status" role="status">Escolha um número de 1 a 10.</p>
                 </div>
-                <input id="guess" aria-label="Chute" aria-describedby="status" type="number" min="1" max="10" class="container__input">
+                <label for="difficulty">Dificuldade</label>
+                <select id="difficulty" aria-describedby="difficulty-help">
+                    <option value="10">Iniciante (1–10)</option>
+                    <option value="25">Intermediário (1–25)</option>
+                    <option value="50">Avançado (1–50)</option>
+                </select>
+                <p id="difficulty-help">Mudar a dificuldade inicia uma nova rodada.</p>
+                <label for="guess">Seu palpite</label>
+                <input id="guess" aria-describedby="status" type="number" inputmode="numeric" min="1" max="10" class="container__input">
                 <div class="chute container__botoes">
                     <button type="submit" id="submit" class="container__botao">Chutar</button>
                     <button type="button" id="reiniciar" class="container__botao" disabled>Novo jogo</button>
                 </div>
+                <section id="guess-history" aria-labelledby="history-title" hidden>
+                    <h2 id="history-title">Últimos palpites</h2>
+                    <p id="range-hint"></p>
+                    <ol id="recent-guesses"></ol>
+                </section>
             </form>
-            <img src="./img/ia.png" alt="Uma pessoa olhando para a esquerda" class="container__imagem-pessoa" />
+            <img src="./img/ia.png" alt="" class="container__imagem-pessoa">
         </div>
-    </div>
+    </main>
 
 
 
